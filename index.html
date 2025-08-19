@@ -1,45 +1,48 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cockroach Clicker</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: white;
-      overflow: hidden;
-      cursor: crosshair;
-      font-family: Arial, sans-serif;
-    }
-    .roach {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      background-image: url('https://www.pngmart.com/image/2021/04/Cartoon-Cockroach-PNG-Image.png');
-      background-size: cover;
-      transition: transform 0.2s;
-    }
-    .dead {
-      transform: rotate(180deg) scale(0.8);
-      opacity: 0.5;
-      pointer-events: none;
-    }
-    #score {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      font-size: 24px;
-      font-weight: bold;
-      color: black;
-      background: rgba(255, 255, 255, 0.7);
-      padding: 5px 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cockroach Clicker</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: white;
+    overflow: hidden;
+    cursor: crosshair;
+    font-family: Arial, sans-serif;
+  }
+  .roach {
+    position: absolute;
+    width: 80px; /* bigger */
+    height: 80px; /* bigger */
+    background-image: url('https://www.pngmart.com/image/2021/04/Cartoon-Cockroach-PNG-Image.png');
+    background-size: cover;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .dead {
+    pointer-events: none;
+    animation: explode 0.5s forwards;
+  }
+  @keyframes explode {
+    0% { transform: rotate(0deg) scale(1); opacity: 1; }
+    50% { transform: rotate(360deg) scale(1.5); opacity: 1; }
+    100% { transform: rotate(720deg) scale(0); opacity: 0; }
+  }
+  #score {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 5px 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+</style>
 </head>
 <body>
 
@@ -56,15 +59,15 @@ function updateScore() {
 function createRoach() {
   const roach = document.createElement('div');
   roach.classList.add('roach');
-  roach.style.top = Math.random() * (window.innerHeight - 40) + 'px';
-  roach.style.left = Math.random() * (window.innerWidth - 40) + 'px';
+  roach.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+  roach.style.left = Math.random() * (window.innerWidth - 80) + 'px';
 
   roach.addEventListener('click', () => {
     if (!roach.classList.contains('dead')) {
       roach.classList.add('dead');
       score++;
       updateScore();
-      setTimeout(() => roach.remove(), 1000);
+      setTimeout(() => roach.remove(), 500); // remove after explosion
     }
   });
 
@@ -78,15 +81,15 @@ function moveRoach(roach) {
       clearInterval(interval);
       return;
     }
-    const newTop = Math.random() * (window.innerHeight - 40);
-    const newLeft = Math.random() * (window.innerWidth - 40);
+    const newTop = Math.random() * (window.innerHeight - 80);
+    const newLeft = Math.random() * (window.innerWidth - 80);
     roach.style.top = newTop + 'px';
     roach.style.left = newLeft + 'px';
-  }, 1000 + Math.random() * 2000);
+  }, 3000 + Math.random() * 2000); // slower movement
 }
 
-// spawn new roaches every 2 seconds
-setInterval(createRoach, 2000);
+// spawn new roaches every 3 seconds
+setInterval(createRoach, 3000);
 
 // start with a few
 for (let i = 0; i < 5; i++) createRoach();
