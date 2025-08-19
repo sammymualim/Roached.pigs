@@ -1,47 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cockroach Clicker</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: white;
-      overflow: hidden;
-      cursor: crosshair;
-      font-family: Arial, sans-serif;
-    }
-    .roach, .copcar {
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      background-size: cover;
-      transition: transform 0.2s, opacity 0.2s;
-    }
-    .dead {
-      pointer-events: none;
-      animation: explode 0.5s forwards;
-    }
-    @keyframes explode {
-      0% { transform: rotate(0deg) scale(1); opacity: 1; }
-      50% { transform: rotate(360deg) scale(1.5); opacity: 1; }
-      100% { transform: rotate(720deg) scale(0); opacity: 0; }
-    }
-    #score {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      font-size: 24px;
-      font-weight: bold;
-      color: black;
-      background: rgba(255, 255, 255, 0.7);
-      padding: 5px 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cockroach Clicker</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: white;
+    overflow: hidden;
+    cursor: crosshair;
+    font-family: Arial, sans-serif;
+  }
+  .sprite {
+    position: absolute;
+    background-size: cover;
+    transition: transform 0.2s, opacity 0.2s;
+    pointer-events: auto;
+  }
+  .roach {
+    width: 80px;
+    height: 80px;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/38/Cockroach_illustration.png');
+  }
+  .copcar {
+    width: 100px;
+    height: 60px;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/3c/Police_car_icon.svg');
+  }
+  .dead {
+    pointer-events: none;
+    animation: explode 0.5s forwards;
+  }
+  @keyframes explode {
+    0% { transform: rotate(0deg) scale(1); opacity: 1; }
+    50% { transform: rotate(360deg) scale(1.5); opacity: 1; }
+    100% { transform: rotate(720deg) scale(0); opacity: 0; }
+  }
+  #score {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    background: rgba(255,255,255,0.7);
+    padding: 5px 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+</style>
 </head>
 <body>
 
@@ -55,22 +64,20 @@ function updateScore() {
   scoreDisplay.textContent = 'Score: ' + score;
 }
 
+// Function to create a roach or cop car
 function createSprite(type) {
   const sprite = document.createElement('div');
-  sprite.classList.add(type);
-  sprite.style.top = Math.random() * (window.innerHeight - 80) + 'px';
-  sprite.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+  sprite.classList.add('sprite', type);
 
-  if (type === 'roach') {
-    sprite.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Cockroach_illustration.png/120px-Cockroach_illustration.png')";
-  } else if (type === 'copcar') {
-    sprite.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Police_car_icon.svg/120px-Police_car_icon.svg.png')";
-    sprite.style.width = '100px';
-    sprite.style.height = '60px';
-  }
+  // Random position
+  const width = type === 'copcar' ? 100 : 80;
+  const height = type === 'copcar' ? 60 : 80;
+  sprite.style.top = Math.random() * (window.innerHeight - height) + 'px';
+  sprite.style.left = Math.random() * (window.innerWidth - width) + 'px';
 
+  // Click to kill
   sprite.addEventListener('click', () => {
-    if (!sprite.classList.contains('dead')) {
+    if(!sprite.classList.contains('dead')) {
       sprite.classList.add('dead');
       score++;
       updateScore();
@@ -82,26 +89,30 @@ function createSprite(type) {
   moveSprite(sprite, type);
 }
 
+// Movement function
 function moveSprite(sprite, type) {
   const interval = setInterval(() => {
     if (sprite.classList.contains('dead')) {
       clearInterval(interval);
       return;
     }
-    const height = type === 'copcar' ? 60 : 80;
     const width = type === 'copcar' ? 100 : 80;
-    const newTop = Math.random() * (window.innerHeight - height);
-    const newLeft = Math.random() * (window.innerWidth - width);
-    sprite.style.top = newTop + 'px';
-    sprite.style.left = newLeft + 'px';
-  }, type === 'copcar' ? 5000 + Math.random() * 3000 : 3000 + Math.random() * 2000);
+    const height = type === 'copcar' ? 60 : 80;
+    sprite.style.top = Math.random() * (window.innerHeight - height) + 'px';
+    sprite.style.left = Math.random() * (window.innerWidth - width) + 'px';
+  }, type === 'copcar' ? 5000 + Math.random()*3000 : 3000 + Math.random()*2000);
 }
 
+// Spawn roaches frequently
 setInterval(() => createSprite('roach'), 3000);
+
+// Spawn cop cars rarely
 setInterval(() => createSprite('copcar'), 15000);
 
-for (let i = 0; i < 5; i++) createSprite('roach');
+// Start with a few roaches
+for(let i = 0; i < 5; i++) createSprite('roach');
 </script>
 
 </body>
 </html>
+
