@@ -136,15 +136,14 @@ function moveSprite(sprite, type) {
   }, type === 'copcar' ? 5000 + Math.random()*3000 : 3000 + Math.random()*2000);
 }
 
-// Spawn roaches frequently
+// Spawn multiple roaches and cop cars at start
+for (let i = 0; i < 15; i++) createSprite('roach');  // more roaches
+for (let i = 0; i < 5; i++) createSprite('copcar');  // more cop cars
+
+// Optional: keep spawning new ones periodically
 setInterval(() => createSprite('roach'), 3000);
+setInterval(() => createSprite('copcar'), 8000);
 
-// Spawn cop cars rarely
-setInterval(() => createSprite('copcar'), 15000);
-
-// Start with some roaches and one cop car
-for (let i = 0; i < 5; i++) createSprite('roach');
-createSprite('copcar');
 </script>
 
 </body>
