@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cockroach Clicker</title>
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    background: white;
-    overflow: hidden;
-    cursor: crosshair;
-    font-family: Arial, sans-serif;
-  }
-  .sprite {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background-size: cover;
-    transition: transform 0.2s, opacity 0.2s;
-  }
-  .dead {
-    pointer-events: none;
-    animation: explode 0.5s forwards;
-  }
-  @keyframes explode {
-    0% { transform: rotate(0deg) scale(1); opacity: 1; }
-    50% { transform: rotate(360deg) scale(1.5); opacity: 1; }
-    100% { transform: rotate(720deg) scale(0); opacity: 0; }
-  }
-  #score {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    font-size: 24px;
-    font-weight: bold;
-    color: black;
-    background: rgba(255, 255, 255, 0.7);
-    padding: 5px 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cockroach Clicker</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: white;
+      overflow: hidden;
+      cursor: crosshair;
+      font-family: Arial, sans-serif;
+    }
+    .roach, .copcar {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background-size: cover;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .dead {
+      pointer-events: none;
+      animation: explode 0.5s forwards;
+    }
+    @keyframes explode {
+      0% { transform: rotate(0deg) scale(1); opacity: 1; }
+      50% { transform: rotate(360deg) scale(1.5); opacity: 1; }
+      100% { transform: rotate(720deg) scale(0); opacity: 0; }
+    }
+    #score {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      color: black;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 5px 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+  </style>
 </head>
 <body>
 
@@ -57,24 +57,20 @@ function updateScore() {
 
 function createSprite(type) {
   const sprite = document.createElement('div');
-  sprite.classList.add('sprite');
+  sprite.classList.add(type);
+  sprite.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+  sprite.style.left = Math.random() * (window.innerWidth - 80) + 'px';
 
-  // Choose image
-  if(type === 'roach') {
+  if (type === 'roach') {
     sprite.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Cockroach_illustration.png/120px-Cockroach_illustration.png')";
-  } else if(type === 'copcar') {
+  } else if (type === 'copcar') {
     sprite.style.backgroundImage = "url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Police_car_icon.svg/120px-Police_car_icon.svg.png')";
     sprite.style.width = '100px';
     sprite.style.height = '60px';
   }
 
-  // Random position
-  sprite.style.top = Math.random() * (window.innerHeight - 80) + 'px';
-  sprite.style.left = Math.random() * (window.innerWidth - 80) + 'px';
-
-  // Click event
   sprite.addEventListener('click', () => {
-    if(!sprite.classList.contains('dead')) {
+    if (!sprite.classList.contains('dead')) {
       sprite.classList.add('dead');
       score++;
       updateScore();
@@ -98,19 +94,14 @@ function moveSprite(sprite, type) {
     const newLeft = Math.random() * (window.innerWidth - width);
     sprite.style.top = newTop + 'px';
     sprite.style.left = newLeft + 'px';
-  }, type === 'copcar' ? 5000 + Math.random()*3000 : 3000 + Math.random()*2000); // slower for copcars
+  }, type === 'copcar' ? 5000 + Math.random() * 3000 : 3000 + Math.random() * 2000);
 }
 
-// Spawn roaches often
 setInterval(() => createSprite('roach'), 3000);
-
-// Spawn cop cars rarely
 setInterval(() => createSprite('copcar'), 15000);
 
-// Start with a few roaches
-for(let i=0; i<5; i++) createSprite('roach');
-
+for (let i = 0; i < 5; i++) createSprite('roach');
 </script>
+
 </body>
 </html>
-
