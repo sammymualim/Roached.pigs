@@ -15,11 +15,11 @@
     }
     .roach {
       position: absolute;
-      width: 40px;
-      height: 40px;
+      width: 60px;
+      height: 60px;
       background-image: url('https://www.pngmart.com/image/2021/04/Cartoon-Cockroach-PNG-Image.png');
       background-size: cover;
-      transition: transform 0.2s;
+      transition: transform 0.8s;
     }
     .dead {
       transform: rotate(180deg) scale(0.8);
@@ -55,8 +55,8 @@ function updateScore() {
 function createRoach() {
   const roach = document.createElement('div');
   roach.classList.add('roach');
-  roach.style.top = Math.random() * (window.innerHeight - 40) + 'px';
-  roach.style.left = Math.random() * (window.innerWidth - 40) + 'px';
+  roach.style.top = Math.random() * (window.innerHeight - 60) + 'px';
+  roach.style.left = Math.random() * (window.innerWidth - 60) + 'px';
 
   roach.addEventListener('click', () => {
     if (!roach.classList.contains('dead')) {
@@ -77,8 +77,8 @@ function moveRoach(roach) {
       clearInterval(interval);
       return;
     }
-    const newTop = Math.random() * (window.innerHeight - 40);
-    const newLeft = Math.random() * (window.innerWidth - 40);
+    const newTop = Math.random() * (window.innerHeight - 60);
+    const newLeft = Math.random() * (window.innerWidth - 60);
     roach.style.top = newTop + 'px';
     roach.style.left = newLeft + 'px';
   }, 1000 + Math.random() * 2000);
